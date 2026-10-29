@@ -1,5 +1,9 @@
 # Changes
 
+## 0.1.2 (2026-10-29)
+
+- Maturity: beta.
+
 ## 0.1.1 (2026-10-29)
 
 - Requires Moodle 5.0 (question banks are course activities since 5.0).

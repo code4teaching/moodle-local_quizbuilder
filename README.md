@@ -15,7 +15,7 @@ Moodle core cannot import questions or create quizzes through web services. This
 
 ## Requirements
 
-- Moodle 4.5 or later (tested on Moodle 5.2)
+- Moodle 5.0 or later (question banks are course activities since 5.0; tested on Moodle 5.2)
 - Web services enabled
 
 ## Installation

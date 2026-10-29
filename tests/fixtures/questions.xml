@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<question type="category"><category><text>$course$/top/Quiz Builder test</text></category></question>
+<question type="multichoice">
+<name><text>QB-01 Loop count</text></name>
+<questiontext format="html"><text><![CDATA[<p>How often does <code>for (int i = 0; i &lt; 3; i++)</code> run?</p>]]></text></questiontext>
+<generalfeedback format="html"><text></text></generalfeedback>
+<defaultgrade>1</defaultgrade>
+<penalty>0.3333333</penalty>
+<hidden>0</hidden>
+<correctfeedback format="html"><text>Correct.</text></correctfeedback>
+<partiallycorrectfeedback format="html"><text>Partially correct.</text></partiallycorrectfeedback>
+<incorrectfeedback format="html"><text>Incorrect.</text></incorrectfeedback>
+<shownumcorrect/>
+<single>true</single>
+<shuffleanswers>true</shuffleanswers>
+<answernumbering>abc</answernumbering>
+<answer fraction="100" format="html"><text>3</text><feedback format="html"><text></text></feedback></answer>
+<answer fraction="0" format="html"><text>2</text><feedback format="html"><text></text></feedback></answer>
+<answer fraction="0" format="html"><text>4</text><feedback format="html"><text></text></feedback></answer>
+</question>
+<question type="truefalse">
+<name><text>QB-02 do-while</text></name>
+<questiontext format="html"><text><![CDATA[<p>A do-while loop runs at least once.</p>]]></text></questiontext>
+<generalfeedback format="html"><text></text></generalfeedback>
+<defaultgrade>1</defaultgrade>
+<penalty>1</penalty>
+<hidden>0</hidden>
+<answer fraction="100" format="moodle_auto_format"><text>true</text><feedback format="html"><text></text></feedback></answer>
+<answer fraction="0" format="moodle_auto_format"><text>false</text><feedback format="html"><text></text></feedback></answer>
+</question>
+<question type="ordering">
+<name><text>QB-03 Steps</text></name>
+<questiontext format="html"><text><![CDATA[<p>Put the steps in order.</p>]]></text></questiontext>
+<generalfeedback format="html"><text></text></generalfeedback>
+<defaultgrade>2</defaultgrade>
+<penalty>0.3333333</penalty>
+<hidden>0</hidden>
+<correctfeedback format="html"><text>Correct.</text></correctfeedback>
+<partiallycorrectfeedback format="html"><text>Partially correct.</text></partiallycorrectfeedback>
+<incorrectfeedback format="html"><text>Incorrect.</text></incorrectfeedback>
+<shownumcorrect/>
+<layouttype>VERTICAL</layouttype>
+<selecttype>ALL</selecttype>
+<selectcount>0</selectcount>
+<gradingtype>RELATIVE_NEXT_EXCLUDE_LAST</gradingtype>
+<showgrading>SHOW</showgrading>
+<numberingstyle>none</numberingstyle>
+<answer fraction="1.0000000" format="html"><text>Plan</text></answer>
+<answer fraction="2.0000000" format="html"><text>Code</text></answer>
+<answer fraction="3.0000000" format="html"><text>Test</text></answer>
+</question>
+</quiz>

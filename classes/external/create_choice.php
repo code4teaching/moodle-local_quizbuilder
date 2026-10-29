@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_quizbuilder\external;
 
@@ -22,7 +30,6 @@ use core_external\external_value;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class create_choice extends external_api {
-
     /**
      * Parameters.
      *
@@ -54,8 +61,16 @@ class create_choice extends external_api {
      * @param int $allowupdate
      * @return array
      */
-    public static function execute(int $courseid, int $sectionnum, string $name, string $intro, array $options,
-            int $visible = 0, int $shownames = 1, int $allowupdate = 1): array {
+    public static function execute(
+        int $courseid,
+        int $sectionnum,
+        string $name,
+        string $intro,
+        array $options,
+        int $visible = 0,
+        int $shownames = 1,
+        int $allowupdate = 1
+    ): array {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/course/lib.php');
         require_once($CFG->dirroot . '/course/modlib.php');
@@ -80,6 +95,7 @@ class create_choice extends external_api {
         $choice->visible = $params['visible'];
         $choice->name = $params['name'];
         $choice->introeditor = ['text' => $params['intro'], 'format' => FORMAT_HTML, 'itemid' => 0];
+        $choice->cmidnumber = '';
         $choice->option = $params['options'];
         $choice->limit = array_fill(0, count($params['options']), 0);
         $choice->limitanswers = 0;

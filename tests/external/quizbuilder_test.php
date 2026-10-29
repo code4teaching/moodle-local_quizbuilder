@@ -31,7 +31,6 @@ use core_external\external_api;
 #[\PHPUnit\Framework\Attributes\CoversClass(add_quiz_questions::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(create_choice::class)]
 final class quizbuilder_test extends \advanced_testcase {
-
     /**
      * Imports the fixture questions into a new course.
      *
@@ -107,8 +106,10 @@ final class quizbuilder_test extends \advanced_testcase {
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
         $import = $this->import_fixture($course);
-        $quiz = external_api::clean_returnvalue(create_quiz::execute_returns(),
-            create_quiz::execute($course->id, 1, 'Quiz', '', 0));
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 1, 'Quiz', '', 0)
+        );
 
         $result = add_quiz_questions::execute($quiz['cmid'], [], $import['categoryid']);
         $result = external_api::clean_returnvalue(add_quiz_questions::execute_returns(), $result);
@@ -127,8 +128,10 @@ final class quizbuilder_test extends \advanced_testcase {
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
         $import = $this->import_fixture($course);
-        $quiz = external_api::clean_returnvalue(create_quiz::execute_returns(),
-            create_quiz::execute($course->id, 1, 'Quiz', '', 0));
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 1, 'Quiz', '', 0)
+        );
 
         $result = add_quiz_questions::execute($quiz['cmid'], $import['questionids'], 0, 1, 0);
         $result = external_api::clean_returnvalue(add_quiz_questions::execute_returns(), $result);
@@ -144,8 +147,10 @@ final class quizbuilder_test extends \advanced_testcase {
         $this->resetAfterTest();
         $this->setAdminUser();
         $course = $this->getDataGenerator()->create_course();
-        $quiz = external_api::clean_returnvalue(create_quiz::execute_returns(),
-            create_quiz::execute($course->id, 1, 'Quiz', '', 0));
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 1, 'Quiz', '', 0)
+        );
 
         $this->expectException(\moodle_exception::class);
         add_quiz_questions::execute($quiz['cmid']);

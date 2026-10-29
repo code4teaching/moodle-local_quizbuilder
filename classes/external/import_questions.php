@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_quizbuilder\external;
 
@@ -24,7 +32,6 @@ use core_external\external_value;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class import_questions extends external_api {
-
     /**
      * Parameters.
      *
@@ -34,8 +41,12 @@ class import_questions extends external_api {
         return new external_function_parameters([
             'courseid' => new external_value(PARAM_INT, 'Course ID'),
             'xml' => new external_value(PARAM_RAW, 'Questions in Moodle XML format'),
-            'bankcmid' => new external_value(PARAM_INT,
-                'Course module ID of the question bank (0 = first bank of the course, created if missing)', VALUE_DEFAULT, 0),
+            'bankcmid' => new external_value(
+                PARAM_INT,
+                'Course module ID of the question bank (0 = first bank of the course, created if missing)',
+                VALUE_DEFAULT,
+                0
+            ),
         ]);
     }
 
@@ -53,8 +64,10 @@ class import_questions extends external_api {
         require_once($CFG->dirroot . '/question/format.php');
         require_once($CFG->dirroot . '/question/format/xml/format.php');
 
-        $params = self::validate_parameters(self::execute_parameters(),
-            ['courseid' => $courseid, 'xml' => $xml, 'bankcmid' => $bankcmid]);
+        $params = self::validate_parameters(
+            self::execute_parameters(),
+            ['courseid' => $courseid, 'xml' => $xml, 'bankcmid' => $bankcmid]
+        );
 
         $course = get_course($params['courseid']);
         $coursecontext = \context_course::instance($course->id);

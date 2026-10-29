@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_quizbuilder\external;
 
@@ -21,7 +29,6 @@ use core_external\external_value;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class create_quiz extends external_api {
-
     /**
      * Parameters.
      *
@@ -35,15 +42,23 @@ class create_quiz extends external_api {
             'intro' => new external_value(PARAM_RAW, 'Description (HTML)', VALUE_DEFAULT, ''),
             'visible' => new external_value(PARAM_INT, 'Visible (1) or hidden (0)', VALUE_DEFAULT, 0),
             'attempts' => new external_value(PARAM_INT, 'Number of attempts (0 = unlimited)', VALUE_DEFAULT, 1),
-            'preferredbehaviour' => new external_value(PARAM_ALPHANUMEXT,
-                'deferredfeedback, interactive or immediatefeedback', VALUE_DEFAULT, 'deferredfeedback'),
+            'preferredbehaviour' => new external_value(
+                PARAM_ALPHANUMEXT,
+                'deferredfeedback, interactive or immediatefeedback',
+                VALUE_DEFAULT,
+                'deferredfeedback'
+            ),
             'shuffleanswers' => new external_value(PARAM_INT, 'Shuffle answers within questions (0/1)', VALUE_DEFAULT, 1),
             'timelimit' => new external_value(PARAM_INT, 'Time limit in seconds (0 = none)', VALUE_DEFAULT, 0),
             'grade' => new external_value(PARAM_FLOAT, 'Maximum grade', VALUE_DEFAULT, 10),
             'timeopen' => new external_value(PARAM_INT, 'Open from (Unix time, 0 = always)', VALUE_DEFAULT, 0),
             'timeclose' => new external_value(PARAM_INT, 'Close at (Unix time, 0 = never)', VALUE_DEFAULT, 0),
-            'reviewafter' => new external_value(PARAM_INT,
-                'Show marks, correctness and feedback after the attempt (0/1)', VALUE_DEFAULT, 1),
+            'reviewafter' => new external_value(
+                PARAM_INT,
+                'Show marks, correctness and feedback after the attempt (0/1)',
+                VALUE_DEFAULT,
+                1
+            ),
         ]);
     }
 
@@ -65,9 +80,21 @@ class create_quiz extends external_api {
      * @param int $reviewafter
      * @return array
      */
-    public static function execute(int $courseid, int $sectionnum, string $name, string $intro = '', int $visible = 0,
-            int $attempts = 1, string $preferredbehaviour = 'deferredfeedback', int $shuffleanswers = 1,
-            int $timelimit = 0, float $grade = 10, int $timeopen = 0, int $timeclose = 0, int $reviewafter = 1): array {
+    public static function execute(
+        int $courseid,
+        int $sectionnum,
+        string $name,
+        string $intro = '',
+        int $visible = 0,
+        int $attempts = 1,
+        string $preferredbehaviour = 'deferredfeedback',
+        int $shuffleanswers = 1,
+        int $timelimit = 0,
+        float $grade = 10,
+        int $timeopen = 0,
+        int $timeclose = 0,
+        int $reviewafter = 1
+    ): array {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/course/lib.php');
         require_once($CFG->dirroot . '/course/modlib.php');
@@ -98,6 +125,7 @@ class create_quiz extends external_api {
         $quiz->visible = $params['visible'];
         $quiz->name = $params['name'];
         $quiz->introeditor = ['text' => $params['intro'], 'format' => FORMAT_HTML, 'itemid' => 0];
+        $quiz->cmidnumber = '';
 
         $quiz->timeopen = $params['timeopen'];
         $quiz->timeclose = $params['timeclose'];

@@ -5,6 +5,14 @@
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace local_quizbuilder\external;
 
@@ -22,7 +30,6 @@ use core_external\external_value;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class add_quiz_questions extends external_api {
-
     /**
      * Parameters.
      *
@@ -32,11 +39,23 @@ class add_quiz_questions extends external_api {
         return new external_function_parameters([
             'cmid' => new external_value(PARAM_INT, 'Course module ID of the quiz'),
             'questionids' => new external_multiple_structure(
-                new external_value(PARAM_INT, 'Question ID'), 'Questions to add', VALUE_DEFAULT, []),
-            'categoryid' => new external_value(PARAM_INT,
-                'Add all current questions of this category (used when questionids is empty)', VALUE_DEFAULT, 0),
-            'maxmark' => new external_value(PARAM_FLOAT, 'Mark per question (0 = default mark of the question)',
-                VALUE_DEFAULT, 0),
+                new external_value(PARAM_INT, 'Question ID'),
+                'Questions to add',
+                VALUE_DEFAULT,
+                []
+            ),
+            'categoryid' => new external_value(
+                PARAM_INT,
+                'Add all current questions of this category (used when questionids is empty)',
+                VALUE_DEFAULT,
+                0
+            ),
+            'maxmark' => new external_value(
+                PARAM_FLOAT,
+                'Mark per question (0 = default mark of the question)',
+                VALUE_DEFAULT,
+                0
+            ),
             'shuffle' => new external_value(PARAM_INT, 'Shuffle the order of the questions (0/1)', VALUE_DEFAULT, 1),
         ]);
     }
@@ -51,8 +70,13 @@ class add_quiz_questions extends external_api {
      * @param int $shuffle
      * @return array
      */
-    public static function execute(int $cmid, array $questionids = [], int $categoryid = 0, float $maxmark = 0,
-            int $shuffle = 1): array {
+    public static function execute(
+        int $cmid,
+        array $questionids = [],
+        int $categoryid = 0,
+        float $maxmark = 0,
+        int $shuffle = 1
+    ): array {
         global $CFG, $DB;
         require_once($CFG->dirroot . '/mod/quiz/locallib.php');
 
@@ -78,12 +102,16 @@ class add_quiz_questions extends external_api {
 
         foreach ($ids as $id) {
             $question = $DB->get_record('question', ['id' => $id], '*', MUST_EXIST);
-            $questioncontext = \context::instance_by_id(
-                $DB->get_field_sql('SELECT qc.contextid
-                                      FROM {question_bank_entries} qbe
-                                      JOIN {question_versions} qv ON qv.questionbankentryid = qbe.id
-                                      JOIN {question_categories} qc ON qc.id = qbe.questioncategoryid
-                                     WHERE qv.questionid = ?', [$question->id], MUST_EXIST));
+            $contextid = $DB->get_field_sql(
+                'SELECT qc.contextid
+                   FROM {question_bank_entries} qbe
+                   JOIN {question_versions} qv ON qv.questionbankentryid = qbe.id
+                   JOIN {question_categories} qc ON qc.id = qbe.questioncategoryid
+                  WHERE qv.questionid = ?',
+                [$question->id],
+                MUST_EXIST
+            );
+            $questioncontext = \context::instance_by_id($contextid);
             require_capability('moodle/question:useall', $questioncontext);
             quiz_add_quiz_question($question->id, $quiz, 0, $params['maxmark'] ?: null);
         }

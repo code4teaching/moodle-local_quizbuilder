@@ -1,0 +1,30 @@
+name: Mirror to GitLab
+
+# Copies main and all tags to the school GitLab after every push.
+# Needs the repository variable GITLAB_PROJECT (e.g. gitlab.lgsit.de/group/moodle-local_quizbuilder)
+# and the secret GITLAB_TOKEN (project access token with write_repository).
+
+on:
+  push:
+    branches: [main]
+    tags: ['*']
+
+jobs:
+  mirror:
+    runs-on: ubuntu-24.04
+    if: ${{ vars.GITLAB_PROJECT != '' }}
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Push to GitLab
+        env:
+          GITLAB_TOKEN: ${{ secrets.GITLAB_TOKEN }}
+          GITLAB_PROJECT: ${{ vars.GITLAB_PROJECT }}
+        run: |
+          if [ -z "$GITLAB_TOKEN" ]; then echo "GITLAB_TOKEN is not set"; exit 1; fi
+          remote="https://mirror:${GITLAB_TOKEN}@${GITLAB_PROJECT}.git"
+          git push "$remote" HEAD:refs/heads/main
+          git push "$remote" --tags

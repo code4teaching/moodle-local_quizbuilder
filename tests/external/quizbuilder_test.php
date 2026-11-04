@@ -221,7 +221,7 @@ final class quizbuilder_test extends \advanced_testcase {
             <question type="truefalse"><name><text>No combined feedback needed</text></name>
             <questiontext format="html"><text>True?</text></questiontext>
             <answer fraction="100"><text>true</text></answer><answer fraction="0"><text>false</text></answer></question>
-            <question type="match"><name><text>Pairs</text></name>
+            <question type="matching"><name><text>Pairs</text></name>
             <questiontext format="html"><text>Match</text></questiontext>
             <correctfeedback format="html"><text><![CDATA[<p>&nbsp;</p>]]></text></correctfeedback>
             <partiallycorrectfeedback format="html"><text>Check the types.</text></partiallycorrectfeedback>
@@ -234,7 +234,7 @@ final class quizbuilder_test extends \advanced_testcase {
         } catch (\moodle_exception $e) {
             $this->assertSame('missingfeedback', $e->errorcode);
             $this->assertStringContainsString('"Steps" (ordering): partiallycorrectfeedback', $e->getMessage());
-            $this->assertStringContainsString('"Pairs" (match): correctfeedback', $e->getMessage());
+            $this->assertStringContainsString('"Pairs" (matching): correctfeedback', $e->getMessage());
             $this->assertStringNotContainsString('No combined feedback needed', $e->getMessage());
         }
         $this->assertSame($before, $DB->count_records('question'));

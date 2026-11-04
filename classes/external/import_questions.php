@@ -32,9 +32,9 @@ use core_external\external_value;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class import_questions extends external_api {
-    /** @var string[] Question types that store correct, partially correct and incorrect feedback. */
+    /** @var string[] Question types (as in Moodle XML) that store correct, partially correct and incorrect feedback. */
     public const COMBINED_FEEDBACK_QTYPES = [
-        'multichoice', 'match', 'randomsamatch', 'ordering', 'ddwtos', 'gapselect', 'ddimageortext', 'ddmarker',
+        'multichoice', 'matching', 'randomsamatch', 'ordering', 'ddwtos', 'gapselect', 'ddimageortext', 'ddmarker',
     ];
 
     /** @var string[] The combined feedback fields. */

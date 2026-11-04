@@ -28,7 +28,7 @@ Feedback is part of the question, not decoration. Write it for the question at h
 - **`generalfeedback`**: shown after the attempt to everyone. Explain the idea behind the correct answer
   in one or two sentences.
 - **Per answer** (`<answer>…<feedback>`): for a wrong answer, name the typical mistake that leads to it.
-- **Combined feedback** for multiple choice, matching, `randomsamatch`, ordering, `ddwtos`, `gapselect`,
+- **Combined feedback** for `multichoice`, `matching`, `randomsamatch`, `ordering`, `ddwtos`, `gapselect`,
   `ddimageortext` and `ddmarker` – all three are required, none may be empty:
   - `correctfeedback`: confirm what the student got right and why it is right.
   - `partiallycorrectfeedback`: say which part to check again, without listing the solution.

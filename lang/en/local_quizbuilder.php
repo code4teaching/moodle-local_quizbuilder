@@ -25,7 +25,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['importfailed'] = 'Question import failed: {$a}';
+$string['missingfeedback'] = 'Nothing was imported. These questions need feedback written for them: {$a}. Add the elements correctfeedback, partiallycorrectfeedback and incorrectfeedback, each with a text that fits the question: correctfeedback confirms what the student got right and why, partiallycorrectfeedback says which part to check again, incorrectfeedback gives a hint towards the solution without revealing it. Then send the whole file again.';
 $string['nobank'] = 'No question bank found for this course.';
 $string['noquestions'] = 'No questions given or found in the category.';
 $string['pluginname'] = 'Quiz Builder';
 $string['privacy:metadata'] = 'The Quiz Builder plugin does not store any personal data.';
+$string['rulesnotread'] = 'Nothing was imported. The rules for writing questions have not been read or have changed. Call local_quizbuilder_get_rules, read the rules, confirm them to the user and pass the returned version as rulesversion.';

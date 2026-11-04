@@ -26,6 +26,7 @@ use core_external\external_api;
  * @copyright  2026 Holger Sebastião
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(get_rules::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(import_questions::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(create_quiz::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(add_quiz_questions::class)]
@@ -39,7 +40,7 @@ final class quizbuilder_test extends \advanced_testcase {
      */
     private function import_fixture(\stdClass $course): array {
         $xml = file_get_contents(__DIR__ . '/../fixtures/questions.xml');
-        $result = import_questions::execute($course->id, $xml);
+        $result = import_questions::execute($course->id, get_rules::version(), $xml);
         return external_api::clean_returnvalue(import_questions::execute_returns(), $result);
     }
 
@@ -197,6 +198,79 @@ final class quizbuilder_test extends \advanced_testcase {
         $this->setUser($student);
 
         $this->expectException(\required_capability_exception::class);
-        import_questions::execute($course->id, '<?xml version="1.0"?><quiz></quiz>');
+        import_questions::execute($course->id, get_rules::version(), '<?xml version="1.0"?><quiz></quiz>');
+    }
+
+    /**
+     * Questions without written combined feedback are refused before anything is imported.
+     */
+    public function test_import_questions_missing_feedback(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $before = $DB->count_records('question');
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?><quiz>
+            <question type="ordering"><name><text>Steps</text></name>
+            <questiontext format="html"><text>Order</text></questiontext>
+            <correctfeedback format="html"><text>Right order.</text></correctfeedback>
+            <incorrectfeedback format="html"><text>Start with planning.</text></incorrectfeedback>
+            <answer fraction="1" format="html"><text>Plan</text></answer>
+            <answer fraction="2" format="html"><text>Code</text></answer></question>
+            <question type="truefalse"><name><text>No combined feedback needed</text></name>
+            <questiontext format="html"><text>True?</text></questiontext>
+            <answer fraction="100"><text>true</text></answer><answer fraction="0"><text>false</text></answer></question>
+            <question type="match"><name><text>Pairs</text></name>
+            <questiontext format="html"><text>Match</text></questiontext>
+            <correctfeedback format="html"><text><![CDATA[<p>&nbsp;</p>]]></text></correctfeedback>
+            <partiallycorrectfeedback format="html"><text>Check the types.</text></partiallycorrectfeedback>
+            <incorrectfeedback format="html"><text>int holds whole numbers.</text></incorrectfeedback></question>
+            </quiz>';
+
+        try {
+            import_questions::execute($course->id, get_rules::version(), $xml);
+            $this->fail('Expected missingfeedback');
+        } catch (\moodle_exception $e) {
+            $this->assertSame('missingfeedback', $e->errorcode);
+            $this->assertStringContainsString('"Steps" (ordering): partiallycorrectfeedback', $e->getMessage());
+            $this->assertStringContainsString('"Pairs" (match): correctfeedback', $e->getMessage());
+            $this->assertStringNotContainsString('No combined feedback needed', $e->getMessage());
+        }
+        $this->assertSame($before, $DB->count_records('question'));
+    }
+
+    /**
+     * get_rules returns rules.md and a version that import_questions accepts.
+     */
+    public function test_get_rules(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $result = external_api::clean_returnvalue(get_rules::execute_returns(), get_rules::execute());
+
+        $this->assertMatchesRegularExpression('/^[0-9a-f]{8}$/', $result['version']);
+        $this->assertStringContainsString('correctfeedback', $result['rules']);
+        $this->assertSame(get_rules::version(), $result['version']);
+    }
+
+    /**
+     * Without the current rules version nothing is imported.
+     */
+    public function test_import_questions_rules_not_read(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $before = $DB->count_records('question');
+        $xml = file_get_contents(__DIR__ . '/../fixtures/questions.xml');
+
+        try {
+            import_questions::execute($course->id, 'outdated', $xml);
+            $this->fail('Expected rulesnotread');
+        } catch (\moodle_exception $e) {
+            $this->assertSame('rulesnotread', $e->errorcode);
+        }
+        $this->assertSame($before, $DB->count_records('question'));
     }
 }

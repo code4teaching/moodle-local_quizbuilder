@@ -25,9 +25,18 @@
 defined('MOODLE_INTERNAL') || die();
 
 $functions = [
+    'local_quizbuilder_get_rules' => [
+        'classname'    => 'local_quizbuilder\external\get_rules',
+        'description'  => 'Call this first: returns the rules for writing questions (Markdown) and their version. ' .
+            'Read the rules, confirm them to the user and pass the version to import_questions.',
+        'type'         => 'read',
+    ],
     'local_quizbuilder_import_questions' => [
         'classname'    => 'local_quizbuilder\external\import_questions',
-        'description'  => 'Imports questions from Moodle XML into the default question bank of a course.',
+        'description'  => 'Imports questions from Moodle XML into the default question bank of a course. ' .
+            'Requires the rulesversion from local_quizbuilder_get_rules. ' .
+            'Multiple choice, matching, ordering and drag-and-drop questions must include correctfeedback, ' .
+            'partiallycorrectfeedback and incorrectfeedback written for each question; otherwise nothing is imported.',
         'type'         => 'write',
         'capabilities' => 'moodle/question:add',
     ],

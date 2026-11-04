@@ -1,5 +1,15 @@
 # Changes
 
+## 0.1.3 (2026-11-04)
+
+- `import_questions` checks the combined feedback (correct, partially correct, incorrect) of multiple choice,
+  matching, ordering and drag-and-drop questions. If one is missing or empty, nothing is imported and the
+  message asks the caller to write feedback that fits each question, instead of failing with a database error.
+- The function and parameter descriptions tell AI assistants about this up front.
+- New `get_rules`: returns `rules.md` (how to write questions and feedback) and its version.
+  `import_questions` requires this version as the new parameter `rulesversion`, so the rules have to be read
+  before importing; the rules ask the assistant to confirm them to the user. Callers of 0.1.2 must add it.
+
 ## 0.1.2 (2026-10-29)
 
 - Maturity: beta.

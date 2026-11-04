@@ -8,6 +8,7 @@ Moodle core cannot import questions or create quizzes through web services. This
 
 | Function | What it does |
 | --- | --- |
+| `local_quizbuilder_get_rules` | Returns the rules for writing questions (`rules.md`) and their version. Call it first. |
 | `local_quizbuilder_import_questions` | Imports questions in Moodle XML format into the question bank of a course. Categories given in the file (`$course$/top/…`) are created. |
 | `local_quizbuilder_create_quiz` | Creates a quiz in a course section (attempts, question behaviour, shuffling, time limit, grade, open/close dates, review options). |
 | `local_quizbuilder_add_quiz_questions` | Adds questions to a quiz, either by ID or all current questions of a category. |
@@ -46,10 +47,21 @@ wsfunction=local_quizbuilder_create_quiz
 courseid=5&sectionnum=1&name=Quiz 1&attempts=1&grade=10
 ```
 
+## Rules for AI assistants
+
+`rules.md` says how questions should be written: language and tone, Moodle XML details and, above all,
+feedback that fits each question. `get_rules` returns it together with a version (a short hash of the file).
+`import_questions` requires this version as `rulesversion`, so an assistant has to fetch the rules before it can
+import anything. The rules also ask the assistant to confirm them to the user before the first import.
+When `rules.md` is edited, the version changes and the rules have to be read again.
+
 ## Notes on Moodle XML
 
-Ordering, drag-and-drop and matching questions need the combined feedback fields
-(`correctfeedback`, `partiallycorrectfeedback`, `incorrectfeedback`); without them the import fails with a database error.
+Multiple choice, matching, ordering and drag-and-drop questions have combined feedback
+(`correctfeedback`, `partiallycorrectfeedback`, `incorrectfeedback`). `import_questions` refuses a file
+in which one of these is missing or empty and imports nothing. The error message names the questions and
+fields and says what to write, so an AI assistant can fill them in for each question and send the file again.
+(Without this check, missing fields end in a database error from Moodle.)
 
 ## License
 

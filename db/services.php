@@ -52,6 +52,13 @@ $functions = [
         'type'         => 'write',
         'capabilities' => 'mod/quiz:manage',
     ],
+    'local_quizbuilder_add_random_questions' => [
+        'classname'    => 'local_quizbuilder\external\add_random_questions',
+        'description'  => 'Adds random questions from a category to a quiz. Each attempt draws its own questions, ' .
+            'so students next to each other get different quizzes.',
+        'type'         => 'write',
+        'capabilities' => 'mod/quiz:manage',
+    ],
     'local_quizbuilder_create_choice' => [
         'classname'    => 'local_quizbuilder\external\create_choice',
         'description'  => 'Creates a choice (poll) in a course section.',

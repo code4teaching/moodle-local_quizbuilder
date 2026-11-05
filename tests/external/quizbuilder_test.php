@@ -30,6 +30,7 @@ use core_external\external_api;
 #[\PHPUnit\Framework\Attributes\CoversClass(import_questions::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(create_quiz::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(add_quiz_questions::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(add_random_questions::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(create_choice::class)]
 final class quizbuilder_test extends \advanced_testcase {
     /**
@@ -139,6 +140,50 @@ final class quizbuilder_test extends \advanced_testcase {
 
         $this->assertSame(3, $result['count']);
         $this->assertEquals(3, $result['sumgrades']);
+    }
+
+    /**
+     * Random questions are added as random slots that draw from the category.
+     */
+    public function test_add_random_questions(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $import = $this->import_fixture($course);
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 1, 'Quiz', '', 0)
+        );
+
+        $result = add_random_questions::execute($quiz['cmid'], $import['categoryid'], 2);
+        $result = external_api::clean_returnvalue(add_random_questions::execute_returns(), $result);
+
+        $this->assertSame(2, $result['count']);
+        $this->assertSame(3, $result['available']);
+        $this->assertEquals(2, $result['sumgrades']);
+        $this->assertSame(2, $DB->count_records('quiz_slots', ['quizid' => $quiz['quizid']]));
+        $this->assertSame(2, $DB->count_records('question_set_references', [
+            'component' => 'mod_quiz',
+            'questionarea' => 'slot',
+        ]));
+    }
+
+    /**
+     * More random questions than the category holds are refused.
+     */
+    public function test_add_random_questions_too_many(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $import = $this->import_fixture($course);
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 1, 'Quiz', '', 0)
+        );
+
+        $this->expectException(\moodle_exception::class);
+        add_random_questions::execute($quiz['cmid'], $import['categoryid'], 4);
     }
 
     /**

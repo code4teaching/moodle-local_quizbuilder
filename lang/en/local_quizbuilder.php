@@ -25,6 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $string['importfailed'] = 'Question import failed: {$a}';
+$string['invalidrandomnumber'] = 'Cannot add {$a->number} random questions: the category contains {$a->available} questions. Choose a number between 1 and {$a->available}.';
 $string['missingfeedback'] = 'Nothing was imported. These questions need feedback written for them: {$a}. Add the elements correctfeedback, partiallycorrectfeedback and incorrectfeedback, each with a text that fits the question: correctfeedback confirms what the student got right and why, partiallycorrectfeedback says which part to check again, incorrectfeedback gives a hint towards the solution without revealing it. Then send the whole file again.';
 $string['nobank'] = 'No question bank found for this course.';
 $string['noquestions'] = 'No questions given or found in the category.';

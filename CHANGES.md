@@ -1,5 +1,11 @@
 # Changes
 
+## 0.2.0 (2026-11-05)
+
+- New `add_random_questions`: adds a number of random questions from a category to a quiz. Every attempt
+  draws its own questions, so students sitting next to each other get different quizzes (self-tests).
+  Refuses to add more random questions than the category contains.
+
 ## 0.1.3 (2026-11-04)
 
 - `import_questions` checks the combined feedback (correct, partially correct, incorrect) of multiple choice,

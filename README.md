@@ -4,7 +4,17 @@ Web service functions that let external tools – for example an AI assistant co
 [MCP web service plugin](https://github.com/onbirdev/moodle-webservice_mcp) – build automatically graded
 quizzes in a Moodle course.
 
-Moodle core cannot import questions or create quizzes through web services. This plugin adds that:
+## Why this plugin exists
+
+Quiz Builder was developed for **[VisuDesk](https://visucode.de/visudesk/)**, a free Mac app for teachers, and for AI
+assistants. We wanted teachers to write a quiz as a file on their computer – by hand or with the help of an AI – and
+turn it into an automatically graded Moodle quiz with one step, revise it later and fetch it back with all question
+types.
+
+The functions are not tied to VisuDesk. Any web service client can use them, for example an AI assistant connected
+through the MCP web service. Every call checks the same capabilities as the Moodle interface.
+
+Moodle core cannot import questions or create quizzes through web services. This plugin adds:
 
 | Function | What it does |
 | --- | --- |

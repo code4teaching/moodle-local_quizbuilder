@@ -59,6 +59,13 @@ $functions = [
         'type'         => 'write',
         'capabilities' => 'mod/quiz:manage',
     ],
+    'local_quizbuilder_export_quiz_questions' => [
+        'classname'    => 'local_quizbuilder\external\export_quiz_questions',
+        'description'  => 'Returns the questions of a quiz as Moodle XML (all question types, in quiz order) ' .
+            'and its main settings, for example to edit the quiz in a file and replace the questions later.',
+        'type'         => 'read',
+        'capabilities' => 'mod/quiz:manage',
+    ],
     'local_quizbuilder_add_random_questions' => [
         'classname'    => 'local_quizbuilder\external\add_random_questions',
         'description'  => 'Adds random questions from a category to a quiz. Each attempt draws its own questions, ' .

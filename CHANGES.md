@@ -1,5 +1,11 @@
 # Changes
 
+## 0.4.0 (2026-11-19)
+
+- New `export_quiz_questions`: returns the questions of a quiz as Moodle XML in quiz order, with all question
+  types Moodle can export (images included), and the main quiz settings. Random slots are counted, not exported.
+  Lets tools fetch a quiz back into a file, edit it and replace the questions with `replace_quiz_questions`.
+
 ## 0.3.0 (2026-11-19)
 
 - New `replace_quiz_questions`: replaces all questions of a quiz, for example after the quiz file was revised.

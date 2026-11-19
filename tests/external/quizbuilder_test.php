@@ -33,6 +33,7 @@ use core_external\external_api;
 #[\PHPUnit\Framework\Attributes\CoversClass(add_random_questions::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(create_choice::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(replace_quiz_questions::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(export_quiz_questions::class)]
 final class quizbuilder_test extends \advanced_testcase {
     /**
      * Imports the fixture questions into a new course.
@@ -368,5 +369,50 @@ final class quizbuilder_test extends \advanced_testcase {
 
         $this->expectException(\moodle_exception::class);
         replace_quiz_questions::execute($quiz['cmid'], []);
+    }
+
+    /**
+     * The questions of a quiz come back as Moodle XML in quiz order, together with the settings.
+     */
+    public function test_export_quiz_questions(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $imported = $this->import_fixture($course);
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 1, 'Quiz', '', 0)
+        );
+        add_quiz_questions::execute($quiz['cmid'], array_reverse($imported['questionids']), 0, 0, 0);
+
+        $result = external_api::clean_returnvalue(
+            export_quiz_questions::execute_returns(),
+            export_quiz_questions::execute($quiz['cmid'])
+        );
+        $this->assertSame(3, $result['count']);
+        $this->assertSame(0, $result['randomcount']);
+        $this->assertSame('Quiz', $result['name']);
+        $xml = new \SimpleXMLElement($result['xml']);
+        $types = [];
+        foreach ($xml->question as $question) {
+            $types[] = (string)$question['type'];
+        }
+        $this->assertCount(3, $types);
+        $this->assertSame('ordering', $types[0]); // Quiz order: the last imported question comes first.
+    }
+
+    /**
+     * Without mod/quiz:manage nothing is exported.
+     */
+    public function test_export_quiz_questions_requires_capability(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $quiz = create_quiz::execute($course->id, 1, 'Quiz', '', 0);
+        $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
+        $this->setUser($student);
+
+        $this->expectException(\required_capability_exception::class);
+        export_quiz_questions::execute($quiz['cmid']);
     }
 }

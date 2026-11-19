@@ -14,6 +14,7 @@ Moodle core cannot import questions or create quizzes through web services. This
 | `local_quizbuilder_add_quiz_questions` | Adds questions to a quiz, either by ID or all current questions of a category. |
 | `local_quizbuilder_add_random_questions` | Adds random questions from a category to a quiz: every attempt draws its own questions. |
 | `local_quizbuilder_replace_quiz_questions` | Replaces all questions of a quiz (not after attempts); deletes old questions no other quiz uses. |
+| `local_quizbuilder_export_quiz_questions` | Returns the questions of a quiz as Moodle XML (all types, quiz order) and its main settings. |
 | `local_quizbuilder_create_choice` | Creates a choice activity, e.g. a poll where students show which lesson they are working on. |
 
 ## Requirements
@@ -38,6 +39,7 @@ Every function checks the capabilities of the token's user in the target course,
 - `add_quiz_questions`: `mod/quiz:manage` and `moodle/question:useall` for every question
 - `add_random_questions`: `mod/quiz:manage` and `moodle/question:useall` in the category's question bank
 - `replace_quiz_questions`: `mod/quiz:manage`, `moodle/question:useall` for the new and `moodle/question:editall` (or own) for deleting the old questions
+- `export_quiz_questions`: `mod/quiz:manage` and `moodle/question:viewall` (or own) for every question
 - `create_choice`: `moodle/course:manageactivities` and `mod/choice:addinstance`
 
 New activities are created hidden by default.

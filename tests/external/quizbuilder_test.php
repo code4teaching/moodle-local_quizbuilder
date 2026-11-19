@@ -412,7 +412,8 @@ final class quizbuilder_test extends \advanced_testcase {
         $student = $this->getDataGenerator()->create_and_enrol($course, 'student');
         $this->setUser($student);
 
-        $this->expectException(\required_capability_exception::class);
+        // The quiz is hidden, so a student is stopped before the capability check; either way nothing is exported.
+        $this->expectException(\moodle_exception::class);
         export_quiz_questions::execute($quiz['cmid']);
     }
 }

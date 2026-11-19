@@ -25,7 +25,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_quizbuilder';
-$plugin->version   = 2026111901;
+$plugin->version   = 2026111902;
 $plugin->requires  = 2025041400; // Moodle 5.0 (question banks as activities).
 $plugin->maturity  = MATURITY_BETA;
-$plugin->release   = '0.4.0';
+$plugin->release   = '0.4.1';

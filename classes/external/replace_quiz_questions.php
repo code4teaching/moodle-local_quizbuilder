@@ -100,9 +100,11 @@ class replace_quiz_questions extends external_api {
         // Keep the setting "shuffle questions" of the quiz.
         $shuffle = (int)$DB->get_field('quiz_sections', 'shufflequestions', ['quizid' => $quiz->id, 'firstslot' => 1]);
 
-        $structure = \mod_quiz\quiz_settings::create($quiz->id)->get_structure();
-        foreach (array_reverse($structure->get_slots()) as $slot) {
-            $structure->remove_slot($slot->slot);
+        // Remove from the last slot on, with a fresh structure each time: the structure caches its slots and
+        // pages, and after a removal that cache no longer matches the database.
+        $count = $DB->count_records('quiz_slots', ['quizid' => $quiz->id]);
+        for ($slotnumber = $count; $slotnumber >= 1; $slotnumber--) {
+            \mod_quiz\quiz_settings::create($quiz->id)->get_structure()->remove_slot($slotnumber);
         }
 
         $added = add_quiz_questions::execute($cm->id, $params['questionids'], 0, 0, $shuffle);

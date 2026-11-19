@@ -1,5 +1,9 @@
 # Changes
 
+## 0.4.1 (2026-11-19)
+
+- `replace_quiz_questions` removes the old slots without PHP warnings (fresh quiz structure for each removal).
+
 ## 0.4.0 (2026-11-19)
 
 - New `export_quiz_questions`: returns the questions of a quiz as Moodle XML in quiz order, with all question

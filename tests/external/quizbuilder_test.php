@@ -32,6 +32,7 @@ use core_external\external_api;
 #[\PHPUnit\Framework\Attributes\CoversClass(add_quiz_questions::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(add_random_questions::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(create_choice::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(replace_quiz_questions::class)]
 final class quizbuilder_test extends \advanced_testcase {
     /**
      * Imports the fixture questions into a new course.
@@ -317,5 +318,55 @@ final class quizbuilder_test extends \advanced_testcase {
             $this->assertSame('rulesnotread', $e->errorcode);
         }
         $this->assertSame($before, $DB->count_records('question'));
+    }
+
+    /**
+     * Replacing the questions keeps the quiz and deletes the old questions no other quiz uses.
+     */
+    public function test_replace_quiz_questions(): void {
+        global $DB;
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $first = $this->import_fixture($course);
+        $quiz = external_api::clean_returnvalue(
+            create_quiz::execute_returns(),
+            create_quiz::execute($course->id, 1, 'Quiz', '', 0)
+        );
+        add_quiz_questions::execute($quiz['cmid'], $first['questionids'], 0, 0, 0);
+
+        $check = external_api::clean_returnvalue(
+            replace_quiz_questions::execute_returns(),
+            replace_quiz_questions::execute($quiz['cmid'], [], 1, 1)
+        );
+        $this->assertSame(3, $check['removed']);
+        $this->assertSame(3, $DB->count_records('quiz_slots', ['quizid' => $quiz['quizid']]));
+
+        $second = $this->import_fixture($course);
+        $result = external_api::clean_returnvalue(
+            replace_quiz_questions::execute_returns(),
+            replace_quiz_questions::execute($quiz['cmid'], array_slice($second['questionids'], 0, 2))
+        );
+        $this->assertSame(2, $result['count']);
+        $this->assertSame(3, $result['removed']);
+        $this->assertSame(3, $result['deleted']);
+        $this->assertSame(2, $DB->count_records('quiz_slots', ['quizid' => $quiz['quizid']]));
+        foreach ($first['questionids'] as $id) {
+            $this->assertFalse($DB->record_exists('question', ['id' => $id]));
+        }
+        $this->assertTrue($DB->record_exists('question', ['id' => $second['questionids'][0]]));
+    }
+
+    /**
+     * Without new questions nothing changes.
+     */
+    public function test_replace_quiz_questions_none(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $quiz = create_quiz::execute($course->id, 1, 'Quiz', '', 0);
+
+        $this->expectException(\moodle_exception::class);
+        replace_quiz_questions::execute($quiz['cmid'], []);
     }
 }

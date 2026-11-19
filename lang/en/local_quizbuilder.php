@@ -31,4 +31,5 @@ $string['nobank'] = 'No question bank found for this course.';
 $string['noquestions'] = 'No questions given or found in the category.';
 $string['pluginname'] = 'Quiz Builder';
 $string['privacy:metadata'] = 'The Quiz Builder plugin does not store any personal data.';
+$string['quizhasattempts'] = 'The quiz already has attempts, so its questions cannot be replaced. Create a new quiz instead.';
 $string['rulesnotread'] = 'Nothing was imported. The rules for writing questions have not been read or have changed. Call local_quizbuilder_get_rules, read the rules, confirm them to the user and pass the returned version as rulesversion.';

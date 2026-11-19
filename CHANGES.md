@@ -1,5 +1,11 @@
 # Changes
 
+## 0.3.0 (2026-11-19)
+
+- New `replace_quiz_questions`: replaces all questions of a quiz, for example after the quiz file was revised.
+  Name, settings, place and visibility stay. Refused once the quiz has attempts. Old questions that no other quiz
+  uses are deleted from the question bank (`deleteold`, default on). `dryrun` only checks.
+
 ## 0.2.0 (2026-11-05)
 
 - New `add_random_questions`: adds a number of random questions from a category to a quiz. Every attempt

@@ -52,6 +52,13 @@ $functions = [
         'type'         => 'write',
         'capabilities' => 'mod/quiz:manage',
     ],
+    'local_quizbuilder_replace_quiz_questions' => [
+        'classname'    => 'local_quizbuilder\external\replace_quiz_questions',
+        'description'  => 'Replaces all questions of a quiz (for example after the quiz file was revised). ' .
+            'Settings stay; refused once the quiz has attempts. Old questions no other quiz uses are deleted.',
+        'type'         => 'write',
+        'capabilities' => 'mod/quiz:manage',
+    ],
     'local_quizbuilder_add_random_questions' => [
         'classname'    => 'local_quizbuilder\external\add_random_questions',
         'description'  => 'Adds random questions from a category to a quiz. Each attempt draws its own questions, ' .
